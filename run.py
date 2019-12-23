@@ -8,10 +8,13 @@ lambd = 0.2
 coef_beta = 0.9
 learning_rate=0.0075
 nb_iterations=2000
+keep_prob = 0.6
 gradient_check=True
 
 #Layers
-hidden_layers = [ly.NormalizedReluLayerRegularized(test_x.shape[0], 3, lambd=lambd, coef_beta=coef_beta), ly.NormalizedReluLayerRegularized(3,2, lambd=lambd, coef_beta=coef_beta), ly.NormalizedSigmoidLayer(2, 1,coef_beta=coef_beta)]
+# hidden_layers = [ly.NormalizedReluLayerRegularized(test_x.shape[0], 3, lambd=lambd, coef_beta=coef_beta), ly.NormalizedReluLayerRegularized(3,2, lambd=lambd, coef_beta=coef_beta), ly.NormalizedSigmoidLayer(2, 1,coef_beta=coef_beta)]
+hidden_layers = [ly.NormalizedReluLayerRegularized(X.shape[0], 3, lambd=lambd, coef_beta=coef_beta), ly.SimpleReluLayerWithDropOut(3,2, keep_prob=keep_prob), ly.NormalizedSigmoidLayer(2, 1,coef_beta=coef_beta)]
+
 
 #Network
 nn = nw.Network(hidden_layers)

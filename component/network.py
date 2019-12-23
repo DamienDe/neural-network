@@ -18,7 +18,7 @@ class Network:
                 costs.append(J)
             
             #Computing backward propagation
-            grads = self.model_backward(AL, Y, gradient_check)
+            grads = self.model_backward(AL, Y)
 
             #Checking gradient
             if(gradient_check):
@@ -73,7 +73,7 @@ class Network:
             A = self.hidden_layers[l].forward_propagation(A, **kwargs)
         return A
 
-    def model_backward(self, AL, Y, gradient_check=False): 
+    def model_backward(self, AL, Y): 
         grads = {}
         L = len(self.hidden_layers)
         Y = Y.reshape(AL.shape) # after this line, Y is the same shape as AL
@@ -86,10 +86,9 @@ class Network:
         for l in reversed(range(L-1)):
             dAL_prev = self.hidden_layers[l].back_propagation(dAL_prev)
         
-        #Extracting gradients for checking
-        if gradient_check:
-            for l in (range(L)):
-                grads.update(self.hidden_layers[l].extract_gradient())
+        #Extracting gradients
+        for l in (range(L)):
+            grads.update(self.hidden_layers[l].extract_gradient())
             
         return grads
 
@@ -122,7 +121,7 @@ class Network:
             thetaminus = np.copy(parameters_values)                                      # Step 1
             thetaminus[i][0] = thetaminus[i][0] - epsilon                               # Step 2   
             params = self.vector_to_dictionary(thetaminus,shapes)
-            AL = self.model_forward(X, parameters=params)
+            AL = self.model_forward(X, parameters=params, checking=True)
             J_minus[i] = self.compute_cost(AL, Y)
 
             gradapprox[i] = (J_plus[i] - J_minus[i])/(2*epsilon)
